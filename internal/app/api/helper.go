@@ -20,11 +20,11 @@ func (a *API) configreLoggerField() error {
 }
 
 func (a *API) configreRouterField() {
-	a.router.HandleFunc(prefix + "/articles, a.GetAllArticles").Methods("GET")
+	a.router.HandleFunc(prefix+"/articles", a.GetAllArticles).Methods("GET")
 	a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticlesById).Methods("GET")
 	a.router.HandleFunc(prefix+"/articles/{id}", a.DeleteArticleById).Methods("DELETE")
 	a.router.HandleFunc(prefix+"/articles", a.PostArticle).Methods("POST")
-	a.router.HandleFunc(prefix+"user/register", PostUserRegister).Methods("POST")
+	a.router.HandleFunc(prefix+"user/register", a.PostUserRegister).Methods("POST")
 }
 
 func (a *API) configreStorageField() error {
