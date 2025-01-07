@@ -1,11 +1,13 @@
 package api
 
 import (
-	"net/http"
-
 	_ "github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"github.com/standardWebServer/storage"
+)
+
+var (
+	prefix string = "/api/v1"
 )
 
 func (a *API) configreLoggerField() error {
@@ -18,9 +20,11 @@ func (a *API) configreLoggerField() error {
 }
 
 func (a *API) configreRouterField() {
-	a.router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello! This is rest api!"))
-	})
+	a.router.HandleFunc(prefix + "/articles, a.GetAllArticles").Methods("GET")
+	a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticlesById).Methods("GET")
+	a.router.HandleFunc(prefix+"/articles/{id}", a.DeleteArticleById).Methods("DELETE")
+	a.router.HandleFunc(prefix+"/articles", a.PostArticle).Methods("POST")
+	a.router.HandleFunc(prefix+"user/register", PostUserRegister).Methods("POST")
 }
 
 func (a *API) configreStorageField() error {
