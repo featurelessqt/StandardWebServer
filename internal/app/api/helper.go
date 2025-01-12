@@ -1,8 +1,11 @@
 package api
 
 import (
+	"net/http"
+
 	_ "github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
+	"github.com/standardWebServer/internal/app/middleware"
 	"github.com/standardWebServer/storage"
 )
 
@@ -21,10 +24,16 @@ func (a *API) configreLoggerField() error {
 
 func (a *API) configreRouterField() {
 	a.router.HandleFunc(prefix+"/articles", a.GetAllArticles).Methods("GET")
-	a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticlesById).Methods("GET")
+	//
+	a.router.Handle(prefix+"/articles"+"/{id}", middleware.JwtMiddleware.Handler(
+		http.HandlerFunc(a.GetArticlesById),
+	)).Methods("GET")
+	//a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticlesById).Methods("GET")
+	//
 	a.router.HandleFunc(prefix+"/articles/{id}", a.DeleteArticleById).Methods("DELETE")
 	a.router.HandleFunc(prefix+"/articles", a.PostArticle).Methods("POST")
 	a.router.HandleFunc(prefix+"user/register", a.PostUserRegister).Methods("POST")
+	a.router.HandleFunc(prefix+"/user/auth", a.PostToAuth).Methods("POST")
 }
 
 func (a *API) configreStorageField() error {
